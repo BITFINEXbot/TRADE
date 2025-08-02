@@ -10,7 +10,23 @@ def execute_trade(symbol, side, usd_amount):
     url = "https://api.bitfinex.com" + url_path
 
     nonce = str(int(time.time() * 1000000))
-    amount = str(usd_amount if side == "BUY" else -usd_amount)
+    def get_price(symbol):
+    try:
+        response = requests.get(f"https://api-pub.bitfinex.com/v2/ticker/{symbol}")
+        data = response.json()
+        return float(data[6])  # Last price
+    except Exception as e:
+        print(f"[❌] Грешка при взимане на цена: {e}")
+        return None
+
+# после в execute_trade
+price = get_price(symbol)
+if not price:
+    return {"error": "Неуспешно извличане на текущата цена"}
+
+qty = round(usd_amount / price, 6)
+amount = str(qty if side == "BUY" else -qty)
+
 
     body = {
         "type": "MARKET",
