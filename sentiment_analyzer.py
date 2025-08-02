@@ -1,5 +1,4 @@
 def update_sentiment(symbol):
+    # Симулиран sentiment score между -1 и 1
     import random
-    # Връща стойности между -1.0 и 1.0
-    return random.uniform(-1.0, 1.0)
-
+    return random.uniform(-0.5, 0.5)
